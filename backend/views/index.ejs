@@ -1,0 +1,42 @@
+<% layout('/layouts/boilerplate.ejs') -%>
+<body>
+  <div class="container">
+    <div class="row">
+      <% for(service of services){ %>
+      <div class="card" style="width: 18rem">
+        <a href="/services/<%= service._id %>">
+          <img
+            src="<%= service.image.url %>"
+            class="card-img-top"
+            alt="service image"
+          />
+        </a>
+        <div class="card-body">
+          <h5 class="card-title"><%=service.title%></h5>
+          <p class="card-text"><%=service.description%></p>
+        </div>
+                    
+        <div class="card-body">
+          <a href="/services/<%=service._id%>" class="btn btn-primary"
+            >details</a
+          >
+          <a href="/services/<%=service._id%>/book" class="btn btn-primary"
+            >book now</a
+          >
+        </div>
+      </div>
+
+      <% } %>
+    </div>
+  </div>
+  <% if(currUser && currUser.role === 'provider'){ %>
+  <form action="/services/new" method="GET">
+    <button>create new service</button>
+  </form>
+  <% } %>
+
+  <img
+    src="https://unsplash.com/photos/working-contractor-electrician-fixing-the-light-fsBhBDjxT-4"
+    alt=""
+  />
+</body>

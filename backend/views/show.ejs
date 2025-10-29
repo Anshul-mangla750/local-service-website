@@ -1,0 +1,43 @@
+<% layout('/layouts/boilerplate.ejs') -%>
+<body>
+  <div class="container my-4">
+    <div class="row justify-content-center">
+      <div class="card" style="width: 18rem;">
+        <img src="<%=service.image.url%>" class="card-img-top" alt="service image">
+        <div class="card-body">
+           <p>owned by: <%=service.owner.username%></p>
+          <h5 class="card-title"><%=service.title%></h5>
+          <p class="card-text"><%=service.description%></p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">starting from: <%=service.price%></li>
+          <li class="list-group-item">location: <%=service.location%></li>
+         
+        </ul>
+
+        <% if(currUser && currUser._id.equals(service.owner._id)){ %>
+          <div class="card-body d-flex justify-content-between">
+          <form action="/services/<%=service._id%>/edit" method="GET">
+            <button type="submit" class="btn btn-primary">Edit</button>
+          </form>
+          <form action="/services/<%=service._id%>?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+
+       <% }  %>
+      </div>
+
+      <% if(currUser && !currUser._id.equals(service.owner._id)){ %>
+        <form action="/services/<%=service._id%>/book" method="GET">
+          <button type="submit" class="btn btn-success">Book Now</button>
+        </form>
+      <% } %>
+
+       <form action="/reviews" method="GET">
+            <button type="submit" class="btn btn-danger">give review</button>
+          </form>
+    </div>
+  </div>
+</body>
+ 

@@ -1,0 +1,16 @@
+.popular-service-pill {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 0.4rem 1rem;
+  margin: 0.3rem 0.5rem;
+  background-color: #f8f9fa;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popular-service-pill:hover {
+  background-color: #e2e6ea;
+}
