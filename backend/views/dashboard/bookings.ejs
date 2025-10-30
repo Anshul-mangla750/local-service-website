@@ -1,0 +1,42 @@
+<%- include('../partials/header', { title: 'Bookings Management' }) %>
+
+<h2 class="mb-4">Bookings Management</h2>
+
+<table class="table table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>Service</th>
+      <th>Customer</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Notes</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% bookings.forEach(b => { %>
+      <tr>
+        <td><%= b.serviceId.title %></td>
+        <td><%= b.userId.username %></td>
+        <td><%= new Date(b.date).toLocaleDateString() %></td>
+        <td><%= b.time %></td>
+        <td><%= b.notes || "-" %></td>
+        <td><span class="badge bg-secondary"><%= b.status %></span></td>
+        <td>
+          <form method="POST" action="/dashboard/bookings/<%= b._id %>/status?_method=PUT" class="d-flex">
+            <select name="status" class="form-select form-select-sm me-2">
+              <option value="pending" <%= b.status==='pending'?'selected':'' %>>Pending</option>
+              <option value="accepted" <%= b.status==='accepted'?'selected':'' %>>Accepted</option>
+              <option value="rejected" <%= b.status==='rejected'?'selected':'' %>>Rejected</option>
+              <option value="completed" <%= b.status==='completed'?'selected':'' %>>Completed</option>
+            </select>
+            <button class="btn btn-sm btn-primary">Update</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

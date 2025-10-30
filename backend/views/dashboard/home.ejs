@@ -1,0 +1,55 @@
+<%- include('../partials/header', { title: 'Dashboard Home' }) %>
+
+<h2 class="mb-4">Provider Dashboard Overview</h2>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">New Bookings</h5>
+        <h2><%= newBookings.length %></h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Completed Jobs</h5>
+        <h2><%= completedCount %></h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Total Revenue</h5>
+        <h2>₹<%= revenue.toFixed(2) %></h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h4 class="mt-4">Recent New Bookings</h4>
+<table class="table table-striped mt-2">
+  <thead>
+    <tr>
+      <th>Service</th>
+      <th>Client</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% newBookings.forEach(b => { %>
+      <tr>
+        <td><%= b.serviceId.title %></td>
+        <td><%= b.userId.username %></td>
+        <td><%= new Date(b.date).toLocaleDateString() %></td>
+        <td><span class="badge bg-warning text-dark"><%= b.status %></span></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>

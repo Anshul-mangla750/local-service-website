@@ -1,0 +1,58 @@
+<%- include('../partials/header', { title: 'Earnings / Analytics' }) %>
+
+<h2 class="mb-4">Earnings / Analytics</h2>
+
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h6>Total Bookings</h6>
+        <h3><%= totalBookings %></h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h6>Completed</h6>
+        <h3><%= completedBookings %></h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h6>Pending</h6>
+        <h3><%= pendingBookings %></h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h6>Total Revenue</h6>
+        <h3>₹<%= totalRevenue.toFixed(2) %></h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4 class="mb-3">Services Performance</h4>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Service</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% services.forEach(s => { %>
+      <tr>
+        <td><%= s.title %></td>
+        <td>₹<%= s.price %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>
