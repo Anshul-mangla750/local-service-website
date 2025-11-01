@@ -103,6 +103,7 @@ async function startServer() {
   });
 
   // list all services
+  // const Service = require("./models/browse.js
   app.get(
     "/services",
     asyncWrap(async (req, res) => {

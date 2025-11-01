@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const Service = require("./browse.js");
 
-// const MONGO_URL = "mongodb+srv://anshulmangla143_db_user:YyKavEo7afFoo7SW@cluster0.bakksmx.mongodb.net/?appName=Cluster0";
+const MONGO_URL = "mongodb+srv://anshulmangla143_db_user:YyKavEo7afFoo7SW@cluster0.bakksmx.mongodb.net/?appName=Cluster0";
 
-const MONGO_URL = "mongodb://localhost:27017/database_name";
+// const MONGO_URL = "mongodb://localhost:27017/database_name";
 
 // Connect to MongoDB with a longer timeout
 async function main() {
@@ -12,15 +12,21 @@ async function main() {
         await mongoose.connect(MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 30000,  // Increase timeout to 30 seconds
+            useCreateIndex: true,
         });
-        console.log("Connection successful");
+        console.log('Server connected to MongoDb!');
     } catch (err) {
-        console.error("MongoDB connection error:", err);
+      
+        console.error(err);
     }
+
+
+
 }
 
 main();
+
+
 const data =[
   {
     title: "Electrician for Home Repairs",
