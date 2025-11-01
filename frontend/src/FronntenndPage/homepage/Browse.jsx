@@ -1,6 +1,11 @@
 import React from "react";
 
 function Browse() {
+  const handleCategoryClick = (category) => {
+    // Navigate to backend services page with category filter
+    window.location.href = `http://localhost:8080/services?category=${encodeURIComponent(category)}`;
+  };
+
   return (
     <div className="container">
       <div className="row text-center">
@@ -14,7 +19,7 @@ function Browse() {
 
       <div className="row row-cols-1 row-cols-md-3 g-4 mt-3">
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Home & Garden")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#E6F0FA" }}
@@ -33,7 +38,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Repairs & Maintenance")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#FCE9D6" }}
@@ -52,7 +57,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Electrical")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#FEF9D9" }}
@@ -71,7 +76,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Painting")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#F4E6FA" }}
@@ -90,7 +95,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Automotive")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#FCE6E8" }}
@@ -109,7 +114,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Health & Wellness")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#FCE6ED" }}
@@ -128,7 +133,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Education & Tutoring")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#E6F0FA" }}
@@ -147,7 +152,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Photography")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#F0F0F0" }}
@@ -166,7 +171,7 @@ function Browse() {
         </div>
 
         <div className="col">
-          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>
+          <div className="card h-100 shadow-sm" style={{ borderRadius: "10px", cursor: "pointer", transition: "transform 0.3s ease, box-shadow 0.3s ease" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }} onClick={() => handleCategoryClick("Beauty & Personal Care")}>
             <div
               className="d-flex align-items-center justify-content-center mx-auto mt-3"
               style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#DFF7F4" }}

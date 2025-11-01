@@ -1,0 +1,92 @@
+<%- include('./layout', { title: 'Payment History / Wallet' }) %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <h2 class="mb-4"><i class="fas fa-wallet"></i> Payment History / Wallet</h2>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-rupee-sign fa-2x text-success mb-2"></i>
+        <h5 class="card-title">Total Spent</h5>
+        <h2 class="text-success">₹<%= totalSpent.toFixed(2) %></h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-calendar-check fa-2x text-primary mb-2"></i>
+        <h5 class="card-title">Completed Payments</h5>
+        <h2 class="text-primary"><%= completedPayments %></h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+        <h5 class="card-title">Pending Payments</h5>
+        <h2 class="text-warning"><%= pendingPayments %></h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow-sm">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-history"></i> Payment History</h5>
+      </div>
+      <div class="card-body">
+        <% if (payments.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="fas fa-tools"></i> Service</th>
+                  <th><i class="fas fa-calendar"></i> Date</th>
+                  <th><i class="fas fa-rupee-sign"></i> Amount</th>
+                  <th><i class="fas fa-info-circle"></i> Status</th>
+                  <th><i class="fas fa-receipt"></i> Transaction ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% payments.forEach(p => { %>
+                  <tr>
+                    <td><%= p.serviceId.title %></td>
+                    <td><%= new Date(p.date).toLocaleDateString() %></td>
+                    <td>₹<%= p.amount.toFixed(2) %></td>
+                    <td>
+                      <% if (p.status === 'completed') { %>
+                        <span class="badge bg-success"><%= p.status %></span>
+                      <% } else if (p.status === 'pending') { %>
+                        <span class="badge bg-warning text-dark"><%= p.status %></span>
+                      <% } else if (p.status === 'failed') { %>
+                        <span class="badge bg-danger"><%= p.status %></span>
+                      <% } else { %>
+                        <span class="badge bg-secondary"><%= p.status %></span>
+                      <% } %>
+                    </td>
+                    <td><%= p.transactionId || 'N/A' %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="text-center">
+            <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No payment history found.</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

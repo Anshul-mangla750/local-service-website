@@ -1,55 +1,77 @@
 <%- include('../partials/header', { title: 'Dashboard Home' }) %>
 
-<h2 class="mb-4">Provider Dashboard Overview</h2>
+<div class="row mb-4">
+  <div class="col-md-12">
+    <h2 class="mb-4">Provider Dashboard Overview</h2>
+  </div>
+</div>
 
-<div class="row">
+<div class="row mb-4">
   <div class="col-md-4">
-    <div class="card text-center">
+    <div class="card text-center shadow-sm">
       <div class="card-body">
+        <i class="fas fa-calendar-check fa-2x text-primary mb-2"></i>
         <h5 class="card-title">New Bookings</h5>
-        <h2><%= newBookings.length %></h2>
+        <h2 class="text-primary"><%= newBookings.length %></h2>
       </div>
     </div>
   </div>
   <div class="col-md-4">
-    <div class="card text-center">
+    <div class="card text-center shadow-sm">
       <div class="card-body">
+        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
         <h5 class="card-title">Completed Jobs</h5>
-        <h2><%= completedCount %></h2>
+        <h2 class="text-success"><%= completedCount %></h2>
       </div>
     </div>
   </div>
   <div class="col-md-4">
-    <div class="card text-center">
+    <div class="card text-center shadow-sm">
       <div class="card-body">
+        <i class="fas fa-rupee-sign fa-2x text-warning mb-2"></i>
         <h5 class="card-title">Total Revenue</h5>
-        <h2>₹<%= revenue.toFixed(2) %></h2>
+        <h2 class="text-warning">₹<%= revenue.toFixed(2) %></h2>
       </div>
     </div>
   </div>
 </div>
 
-<hr>
-<h4 class="mt-4">Recent New Bookings</h4>
-<table class="table table-striped mt-2">
-  <thead>
-    <tr>
-      <th>Service</th>
-      <th>Client</th>
-      <th>Date</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% newBookings.forEach(b => { %>
-      <tr>
-        <td><%= b.serviceId.title %></td>
-        <td><%= b.userId.username %></td>
-        <td><%= new Date(b.date).toLocaleDateString() %></td>
-        <td><span class="badge bg-warning text-dark"><%= b.status %></span></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-list"></i> Recent New Bookings</h5>
+      </div>
+      <div class="card-body">
+        <% if (newBookings.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="fas fa-tools"></i> Service</th>
+                  <th><i class="fas fa-user"></i> Client</th>
+                  <th><i class="fas fa-calendar"></i> Date</th>
+                  <th><i class="fas fa-info-circle"></i> Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% newBookings.forEach(b => { %>
+                  <tr>
+                    <td><%= b.serviceId.title %></td>
+                    <td><%= b.userId.username %></td>
+                    <td><%= new Date(b.date).toLocaleDateString() %></td>
+                    <td><span class="badge bg-warning text-dark"><%= b.status %></span></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-muted">No new bookings at the moment.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%- include('../partials/footer') %>
