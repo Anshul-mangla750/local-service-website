@@ -1,0 +1,112 @@
+<%- include('./layout', { title: 'My Bookings' }) %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <h2 class="mb-4"><i class="fas fa-calendar-alt"></i> My Bookings</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-list"></i> All My Bookings</h5>
+      </div>
+      <div class="card-body">
+        <% if (bookings.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="fas fa-tools"></i> Service</th>
+                  <th><i class="fas fa-user"></i> Provider</th>
+                  <th><i class="fas fa-calendar"></i> Date</th>
+                  <th><i class="fas fa-clock"></i> Time</th>
+                  <th><i class="fas fa-sticky-note"></i> Notes</th>
+                  <th><i class="fas fa-info-circle"></i> Status</th>
+                  <th><i class="fas fa-cogs"></i> Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% bookings.forEach(b => { %>
+                  <tr>
+                    <td><%= b.serviceId ? b.serviceId.title : 'Service Deleted' %></td>
+                    <td><%= b.serviceId && b.serviceId.owner ? b.serviceId.owner.username : 'N/A' %></td>
+                    <td><%= new Date(b.date).toLocaleDateString() %></td>
+                    <td><%= b.time %></td>
+                    <td><%= b.notes || "-" %></td>
+                    <td>
+                      <% if (b.status === 'pending') { %>
+                        <span class="badge bg-warning text-dark"><%= b.status %></span>
+                      <% } else if (b.status === 'accepted') { %>
+                        <span class="badge bg-info"><%= b.status %></span>
+                      <% } else if (b.status === 'completed') { %>
+                        <span class="badge bg-success"><%= b.status %></span>
+                      <% } else if (b.status === 'rejected') { %>
+                        <span class="badge bg-danger"><%= b.status %></span>
+                      <% } else { %>
+                        <span class="badge bg-secondary"><%= b.status %></span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if (b.status === 'completed') { %>
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#reviewModal<%= b._id %>">
+                          <i class="fas fa-star"></i> Review
+                        </button>
+                      <% } %>
+                    </td>
+                  </tr>
+
+                  <!-- Review Modal -->
+                  <% if (b.status === 'completed' && b.serviceId) { %>
+                    <div class="modal fade" id="reviewModal<%= b._id %>" tabindex="-1" aria-labelledby="reviewModalLabel<%= b._id %>" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="reviewModalLabel<%= b._id %>">Leave a Review for <%= b.serviceId.title %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form method="POST" action="/user/dashboard/reviews">
+                            <div class="modal-body">
+                              <input type="hidden" name="bookingId" value="<%= b._id %>">
+                              <div class="mb-3">
+                                <label for="rating<%= b._id %>" class="form-label">Rating</label>
+                                <select name="rating" id="rating<%= b._id %>" class="form-select" required>
+                                  <option value="">Select Rating</option>
+                                  <option value="5">5 Stars</option>
+                                  <option value="4">4 Stars</option>
+                                  <option value="3">3 Stars</option>
+                                  <option value="2">2 Stars</option>
+                                  <option value="1">1 Star</option>
+                                </select>
+                              </div>
+                              <div class="mb-3">
+                                <label for="comment<%= b._id %>" class="form-label">Comment</label>
+                                <textarea name="comment" id="comment<%= b._id %>" class="form-control" rows="3" placeholder="Share your experience..."></textarea>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Submit Review</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  <% } %>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="text-center">
+            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No bookings found.</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

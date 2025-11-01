@@ -17,7 +17,7 @@ function Navbar() {
           <Link class="nav-link " to="http://localhost:8080/services">Services</Link>
         </li>
         <li class="nav-item mx-5 ">
-          <a class="nav-link" aria-disabled="true" href='#'>Support</a>
+          <Link class="nav-link" to="/support">Support</Link>
         </li>
          <li class="nav-item ">
           <a class="btn btn-primary bg-success" href="http://localhost:8080/signup" role="button">Sign up</a>

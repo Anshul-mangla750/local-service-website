@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Hero() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Navigate to backend services page with search query
+      window.location.href = `http://localhost:8080/services?search=${encodeURIComponent(searchQuery.trim())}`;
+    }
+  };
+
   return (
     <div className="container-fluid" style={{ width: "100vw" ,backgroundColor:"#F0FFFF" ,height:"100vh" }}>
       <div className="row text-center ">
         <h1 className="mt-5 " style={{ fontSize: "5rem" }}>
-          <span>Find & Book</span> <span style={{color:"green"}}>Local Services</span> 
+          <span>Find & Book</span> <span style={{color:"green"}}>Local Services</span>
         </h1>
         <p className="m-2 text-muted" style={{ fontSize: "1.5rem" }}>
           connect with trusted local service providers in your area. From home
@@ -12,12 +25,15 @@ function Hero() {
         </p>
       </div>
       <div class="row m-5">
-        <form className="d-flex" role="search">
-          <input style={{height:"50px"}}
+        <form className="d-flex" role="search" onSubmit={handleSearch}>
+          <input
+            style={{height:"50px"}}
             className="form-control me-2 "
             type="search"
             placeholder="What service do you need?"
             aria-label="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button className="btn btn-outline-success" type="submit">
             Search

@@ -107,8 +107,12 @@ async function startServer() {
   app.get(
     "/services",
     asyncWrap(async (req, res) => {
-      const services = await Service.find({});
-      res.render("index.ejs", { services });
+      let query = {};
+      if (req.query.category) {
+        query.category = req.query.category;
+      }
+      const services = await Service.find(query);
+      res.render("index.ejs", { services, category: req.query.category || null });
     })
   );
 
@@ -138,9 +142,11 @@ async function startServer() {
         req.flash("error", "Service not found");
         return res.redirect("/services");
       }
-      res.render("show.ejs", { service });
+      res.render("show.ejs", { service  });
     })
   );
+  
+
 
   // create service
   app.post(
@@ -246,7 +252,14 @@ async function startServer() {
       req.login(newUser, (err) => {
         if (err) return next(err);
         req.flash("success", "Welcome to service hub");
-        res.redirect("/services");
+        // Redirect based on role
+        if (req.user.role === "customer") {
+          res.redirect("/user/dashboard");
+        } else if (req.user.role === "provider") {
+          res.redirect("/dashboard");
+        } else {
+          res.redirect("/services");
+        }
       });
     })
   );
@@ -260,7 +273,14 @@ async function startServer() {
     passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }),
     (req, res) => {
       req.flash("success", "Login successful");
-      res.redirect("/services");
+      // Redirect based on role
+      if (req.user.role === "customer") {
+        res.redirect("/user/dashboard");
+      } else if (req.user.role === "provider") {
+        res.redirect("/dashboard");
+      } else {
+        res.redirect("/services");
+      }
     }
   );
 
@@ -344,6 +364,321 @@ async function startServer() {
         completedCount: completedBookings.length,
         revenue,
       });
+    })
+  );
+
+  // ---------- USER DASHBOARD (CUSTOMER) ----------
+  // user dashboard home — upcoming & past bookings, favorite services
+  app.get(
+    "/user/dashboard",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/services");
+      }
+
+      // upcoming bookings (pending or accepted, future date)
+      const upcomingBookings = await Booking.find({
+        userId: req.user._id,
+        status: { $in: ["pending", "accepted"] },
+        date: { $gte: new Date() }
+      }).populate("serviceId").sort({ date: 1 });
+
+      // past bookings (completed or rejected)
+      const pastBookings = await Booking.find({
+        userId: req.user._id,
+        status: { $in: ["completed", "rejected"] }
+      }).populate("serviceId").sort({ date: -1 });
+
+      // favorite services
+      const favoriteServices = await Service.find({ _id: { $in: req.user.favoriteServices || [] } });
+
+      res.render("user/dashboard/home.ejs", {
+        upcomingBookings,
+        pastBookings,
+        favoriteServices,
+      });
+    })
+  );
+
+  // user bookings page
+  app.get(
+    "/user/dashboard/bookings",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/services");
+      }
+
+      const bookings = await Booking.find({ userId: req.user._id }).populate({
+        path: "serviceId",
+        populate: { path: "owner" }
+      }).sort({ createdAt: -1 });
+      
+      res.render("user/dashboard/bookings.ejs", { bookings });
+    })
+  );
+
+  // user favorites page
+  app.get(
+    "/user/dashboard/favorites",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/services");
+      }
+
+      const favoriteServices = await Service.find({ _id: { $in: req.user.favoriteServices || [] } });
+
+      res.render("user/dashboard/favorites.ejs", { favoriteServices });
+    })
+  );
+
+  // add to favorites
+  app.post(
+    "/user/dashboard/favorites/:serviceId",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/services");
+      }
+
+      const { serviceId } = req.params;
+      const service = await Service.findById(serviceId);
+      if (!service) {
+        req.flash("error", "Service not found");
+        return res.redirect("/services");
+      }
+
+      const user = await User.findById(req.user._id);
+      if (!user.favoriteServices.includes(serviceId)) {
+        user.favoriteServices.push(serviceId);
+        await user.save();
+        req.flash("success", "Added to favorites");
+      } else {
+        req.flash("error", "Already in favorites");
+      }
+
+      res.redirect(`/services/${serviceId}`);
+    })
+  );
+
+  // remove from favorites
+  app.delete(
+    "/user/dashboard/favorites/:serviceId",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/user/dashboard/favorites");
+      }
+
+      const { serviceId } = req.params;
+      const user = await User.findById(req.user._id);
+      user.favoriteServices = user.favoriteServices.filter(id => id.toString() !== serviceId);
+      await user.save();
+      req.flash("success", "Removed from favorites");
+
+      res.redirect("/user/dashboard/favorites");
+    })
+  );
+
+  // user settings page (get)
+  app.get(
+    "/user/dashboard/settings",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/services");
+      }
+
+      res.render("user/dashboard/settings.ejs", { user: req.user });
+    })
+  );
+
+  // user settings update
+  app.put(
+    "/user/dashboard/settings",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/user/dashboard/settings");
+      }
+
+      const { username, email, address, phone } = req.body;
+      const user = await User.findById(req.user._id);
+      user.username = username;
+      user.email = email;
+      user.address = address;
+      user.phone = phone;
+      await user.save();
+      req.flash("success", "Profile updated");
+      res.redirect("/user/dashboard/settings");
+    })
+  );
+
+  // change password
+  app.post(
+    "/user/dashboard/change-password",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/user/dashboard/settings");
+      }
+
+      const { currentPassword, newPassword, confirmPassword } = req.body;
+      if (newPassword !== confirmPassword) {
+        req.flash("error", "Passwords do not match");
+        return res.redirect("/user/dashboard/settings");
+      }
+
+      // Note: passport-local-mongoose changePassword method
+      const user = await User.findById(req.user._id);
+      await user.changePassword(currentPassword, newPassword);
+      await user.save();
+      req.flash("success", "Password changed successfully");
+      res.redirect("/user/dashboard/settings");
+    })
+  );
+
+  // user wallet/payment history
+  app.get(
+    "/user/dashboard/wallet",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/services");
+      }
+
+      // For now, simulate payment history based on completed bookings
+      // In a real app, you'd have a Payment model
+      const completedBookings = await Booking.find({
+        userId: req.user._id,
+        status: "completed"
+      }).populate("serviceId");
+
+      const pendingBookings = await Booking.find({
+        userId: req.user._id,
+        status: { $in: ["pending", "accepted"] }
+      }).populate("serviceId");
+
+      let totalSpent = 0;
+      const payments = completedBookings.map(booking => {
+        const amount = booking.serviceId.price || 0;
+        totalSpent += amount;
+        return {
+          serviceId: booking.serviceId,
+          date: booking.date,
+          amount: amount,
+          status: "completed",
+          transactionId: `TXN${booking._id.toString().slice(-8).toUpperCase()}`
+        };
+      });
+
+      res.render("user/dashboard/wallet.ejs", {
+        payments,
+        totalSpent,
+        completedPayments: completedBookings.length,
+        pendingPayments: pendingBookings.length,
+      });
+    })
+  );
+
+  // user reviews page
+  app.get(
+    "/user/dashboard/reviews",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/services");
+      }
+
+      const Review = require("./models/reviews.js");
+      const reviews = await Review.find({ userId: req.user._id }).populate({
+        path: "bookingId",
+        populate: { path: "serviceId" }
+      }).sort({ createdAt: -1 });
+
+      const averageRating = reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : 0;
+      const fiveStarReviews = reviews.filter(r => r.rating === 5).length;
+
+      res.render("user/dashboard/reviews.ejs", {
+        reviews,
+        averageRating,
+        fiveStarReviews,
+      });
+    })
+  );
+
+  // submit review
+  app.post(
+    "/user/dashboard/reviews",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/user/dashboard/reviews");
+      }
+
+      const { bookingId, rating, comment } = req.body;
+      const booking = await Booking.findById(bookingId);
+      if (!booking || booking.userId.toString() !== req.user._id.toString() || booking.status !== "completed") {
+        req.flash("error", "Invalid review submission");
+        return res.redirect("/user/dashboard/reviews");
+      }
+
+      const Review = require("./models/reviews.js");
+      const existingReview = await Review.findOne({ bookingId });
+      if (existingReview) {
+        req.flash("error", "Review already exists for this booking");
+        return res.redirect("/user/dashboard/reviews");
+      }
+
+      const newReview = new Review({
+        bookingId,
+        userId: req.user._id,
+        rating: parseInt(rating),
+        comment,
+      });
+      await newReview.save();
+      req.flash("success", "Review submitted successfully");
+      res.redirect("/user/dashboard/reviews");
+    })
+  );
+
+  // update review
+  app.put(
+    "/user/dashboard/reviews/:reviewId",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      if (req.user.role !== "customer") {
+        req.flash("error", "Access denied");
+        return res.redirect("/user/dashboard/reviews");
+      }
+
+      const { reviewId } = req.params;
+      const { rating, comment } = req.body;
+      const Review = require("./models/reviews.js");
+      const review = await Review.findById(reviewId);
+      if (!review || review.userId.toString() !== req.user._id.toString()) {
+        req.flash("error", "Review not found");
+        return res.redirect("/user/dashboard/reviews");
+      }
+
+      review.rating = parseInt(rating);
+      review.comment = comment;
+      await review.save();
+      req.flash("success", "Review updated successfully");
+      res.redirect("/user/dashboard/reviews");
     })
   );
 

@@ -1,0 +1,115 @@
+<%- include('./layout', { title: 'My Reviews' }) %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <h2 class="mb-4"><i class="fas fa-star"></i> My Reviews</h2>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-star fa-2x text-warning mb-2"></i>
+        <h5 class="card-title">Total Reviews</h5>
+        <h2 class="text-warning"><%= reviews.length %></h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+        <h5 class="card-title">Average Rating</h5>
+        <h2 class="text-info"><%= averageRating.toFixed(1) %></h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-thumbs-up fa-2x text-success mb-2"></i>
+        <h5 class="card-title">5-Star Reviews</h5>
+        <h2 class="text-success"><%= fiveStarReviews %></h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow-sm">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-comments"></i> My Reviews</h5>
+      </div>
+      <div class="card-body">
+        <% if (reviews.length > 0) { %>
+          <% reviews.forEach(r => { %>
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h5 class="card-title"><%= r.bookingId.serviceId.title %></h5>
+                    <p class="card-text"><%= r.comment %></p>
+                    <small class="text-muted">Reviewed on <%= new Date(r.createdAt).toLocaleDateString() %></small>
+                  </div>
+                  <div class="text-end">
+                    <div class="mb-2">
+                      <% for (let i = 1; i <= 5; i++) { %>
+                        <i class="fas fa-star <%= i <= r.rating ? 'text-warning' : 'text-muted' %>"></i>
+                      <% } %>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editReviewModal<%= r._id %>">
+                      <i class="fas fa-edit"></i> Edit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit Review Modal -->
+            <div class="modal fade" id="editReviewModal<%= r._id %>" tabindex="-1" aria-labelledby="editReviewModalLabel<%= r._id %>" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editReviewModalLabel<%= r._id %>">Edit Review for <%= r.bookingId.serviceId.title %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form method="POST" action="/user/dashboard/reviews/<%= r._id %>?_method=PUT">
+                    <div class="modal-body">
+                      <div class="mb-3">
+                        <label for="editRating<%= r._id %>" class="form-label">Rating</label>
+                        <select name="rating" id="editRating<%= r._id %>" class="form-select" required>
+                          <option value="5" <%= r.rating === 5 ? 'selected' : '' %>>5 Stars</option>
+                          <option value="4" <%= r.rating === 4 ? 'selected' : '' %>>4 Stars</option>
+                          <option value="3" <%= r.rating === 3 ? 'selected' : '' %>>3 Stars</option>
+                          <option value="2" <%= r.rating === 2 ? 'selected' : '' %>>2 Stars</option>
+                          <option value="1" <%= r.rating === 1 ? 'selected' : '' %>>1 Star</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="editComment<%= r._id %>" class="form-label">Comment</label>
+                        <textarea name="comment" id="editComment<%= r._id %>" class="form-control" rows="3" required><%= r.comment %></textarea>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Update Review</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="text-center">
+            <i class="fas fa-star-half-alt fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No reviews yet. Complete some bookings to leave reviews!</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>
