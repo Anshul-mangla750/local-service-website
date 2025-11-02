@@ -14,13 +14,13 @@ function Navbar() {
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item mx-3 ">
-          <Link class="nav-link " to="http://localhost:8080/services">Services</Link>
+          <Link class="nav-link " to="https://localanshul.onrender.com/services">Services</Link>
         </li>
         <li class="nav-item mx-5 ">
           <Link class="nav-link" to="/support">Support</Link>
         </li>
          <li class="nav-item ">
-          <a class="btn btn-primary bg-success" href="http://localhost:8080/signup" role="button">Sign up</a>
+          <a class="btn btn-primary bg-success" href="https://localanshul.onrender.com" role="button">Sign up</a>
         </li>
       </ul>
     </div>
