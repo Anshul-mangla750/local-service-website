@@ -142,7 +142,42 @@ async function startServer() {
         req.flash("error", "Service not found");
         return res.redirect("/services");
       }
-      res.render("show.ejs", { service  });
+
+      // Fetch reviews for the service
+      const Review = require("./models/reviews.js");
+      const reviews = await Review.find({}).populate({
+        path: "bookingId",
+        match: { serviceId: id },
+        populate: { path: "userId", select: "username" }
+      }).sort({ createdAt: -1 });
+
+      // Filter reviews where bookingId exists (i.e., for this service)
+      const serviceReviews = reviews.filter(r => r.bookingId);
+
+      // Calculate average rating
+      const averageRating = serviceReviews.length > 0 ? serviceReviews.reduce((sum, r) => sum + r.rating, 0) / serviceReviews.length : 0;
+
+      // Check if current user can review (has completed booking for this service)
+      let canReview = false;
+      if (req.user) {
+        const completedBooking = await Booking.findOne({
+          serviceId: id,
+          userId: req.user._id,
+          status: "completed"
+        });
+        canReview = !!completedBooking;
+
+        // Check if user already reviewed
+        if (canReview) {
+          const existingReview = await Review.findOne({
+            bookingId: completedBooking._id,
+            userId: req.user._id
+          });
+          canReview = !existingReview;
+        }
+      }
+
+      res.render("show.ejs", { service, reviews: serviceReviews, averageRating, canReview });
     })
   );
   
@@ -330,6 +365,49 @@ async function startServer() {
       await newBooking.save();
       req.flash("success", "Booking request sent successfully");
       res.redirect("/services");
+    })
+  );
+
+  // submit review from service page
+  app.post(
+    "/services/:id/reviews",
+    isLoggedIn,
+    asyncWrap(async (req, res) => {
+      const { id } = req.params;
+      const { rating, comment } = req.body;
+
+      // Check if user has completed booking for this service
+      const completedBooking = await Booking.findOne({
+        serviceId: id,
+        userId: req.user._id,
+        status: "completed"
+      });
+      if (!completedBooking) {
+        req.flash("error", "You can only review services you've completed");
+        return res.redirect(`/services/${id}`);
+      }
+
+      // Check if review already exists
+      const Review = require("./models/reviews.js");
+      const existingReview = await Review.findOne({
+        bookingId: completedBooking._id,
+        userId: req.user._id
+      });
+      if (existingReview) {
+        req.flash("error", "You have already reviewed this service");
+        return res.redirect(`/services/${id}`);
+      }
+
+      // Create new review
+      const newReview = new Review({
+        bookingId: completedBooking._id,
+        userId: req.user._id,
+        rating: parseInt(rating),
+        comment,
+      });
+      await newReview.save();
+      req.flash("success", "Review submitted successfully");
+      res.redirect(`/services/${id}`);
     })
   );
 
@@ -750,10 +828,19 @@ async function startServer() {
         }
       });
 
-      // simple feedback summary placeholder — if you have a Feedback model you can aggregate here
+      // Calculate feedback summary from reviews
+      const Review = require("./models/reviews.js");
+      const serviceReviews = await Review.find({}).populate({
+        path: "bookingId",
+        match: { serviceId: { $in: serviceIds } },
+      }).sort({ createdAt: -1 });
+
+      // Filter reviews where bookingId exists (i.e., for provider's services)
+      const providerReviews = serviceReviews.filter(r => r.bookingId);
+
       const feedbackSummary = {
-        averageRating: null,
-        totalFeedbacks: 0,
+        averageRating: providerReviews.length > 0 ? providerReviews.reduce((sum, r) => sum + r.rating, 0) / providerReviews.length : 0,
+        totalFeedbacks: providerReviews.length,
       };
 
       res.render("dashboard/earnings.ejs", {

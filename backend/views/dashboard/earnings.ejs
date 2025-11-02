@@ -45,6 +45,27 @@
   </div>
 </div>
 
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-star fa-2x text-warning mb-2"></i>
+        <h6>Average Rating</h6>
+        <h3 class="text-warning"><%= feedbackSummary.averageRating ? feedbackSummary.averageRating.toFixed(1) : 'N/A' %></h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <i class="fas fa-comments fa-2x text-info mb-2"></i>
+        <h6>Total Reviews</h6>
+        <h3 class="text-info"><%= feedbackSummary.totalFeedbacks %></h3>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="card shadow-sm">
