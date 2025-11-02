@@ -12,7 +12,7 @@ async function main() {
         await mongoose.connect(MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useCreateIndex: true,
+            // useCreateIndex: true,
         });
         console.log('Server connected to MongoDb!');
     } catch (err) {
