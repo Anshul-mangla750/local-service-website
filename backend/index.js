@@ -111,8 +111,17 @@ async function startServer() {
       if (req.query.category) {
         query.category = req.query.category;
       }
+      if (req.query.search) {
+        const searchRegex = new RegExp(req.query.search, 'i');
+        query.$or = [
+          { title: searchRegex },
+          { description: searchRegex }
+        ];
+      }
       const services = await Service.find(query);
-      res.render("index.ejs", { services, category: req.query.category || null });
+      // Fetch distinct categories for the filter dropdown
+      const categories = await Service.distinct("category");
+      res.render("index.ejs", { services, category: req.query.category || null, search: req.query.search || null, categories });
     })
   );
 
@@ -177,7 +186,10 @@ async function startServer() {
         }
       }
 
-      res.render("show.ejs", { service, reviews: serviceReviews, averageRating, canReview });
+      // Fetch distinct categories for search filter
+      const categories = await Service.distinct("category");
+
+      res.render("show.ejs", { service, reviews: serviceReviews, averageRating, canReview, categories });
     })
   );
   

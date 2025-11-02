@@ -1,5 +1,6 @@
 <% layout('/layouts/boilerplate.ejs') -%>
 <div class="container my-4">
+ 
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card">
@@ -30,8 +31,7 @@
           <li class="list-group-item">Category: <%= service.category %></li>
         </ul>
         <div class="card-body">
-          
-             <% if (currUser && currUser._id.equals(service.owner._id)) { %>
+              <% if (currUser && currUser._id.equals(service.owner._id)) { %>
             <div class="d-flex justify-content-between">
               <a href="/services/<%= service._id %>/edit" class="btn btn-primary">Edit</a>
               <form action="/services/<%= service._id %>?_method=DELETE" method="POST" class="d-inline">
