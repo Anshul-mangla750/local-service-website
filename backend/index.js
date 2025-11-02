@@ -899,6 +899,17 @@ async function startServer() {
     })
   );
 
+  // my services page for provider
+  app.get(
+    "/dashboard/myservices",
+    isLoggedIn,
+    isProvider,
+    asyncWrap(async (req, res) => {
+      const services = await Service.find({ owner: req.user._id }).sort({ createdAt: -1 });
+      res.render("dashboard/myservices.ejs", { services });
+    })
+  );
+
   // ---------- GLOBAL ERROR HANDLING ----------
   app.use((err, req, res, next) => {
     console.error(err);

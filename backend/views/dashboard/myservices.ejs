@@ -1,0 +1,67 @@
+<%- include('../partials/header', { title: 'My Services' }) %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <h2 class="mb-4">My Services</h2>
+    <a href="/services/new" class="btn btn-success mb-3">Add New Service</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <% if (services.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th><i class="fas fa-image"></i> Image</th>
+              <th><i class="fas fa-tools"></i> Title</th>
+              <th><i class="fas fa-align-left"></i> Description</th>
+              <th><i class="fas fa-rupee-sign"></i> Price</th>
+              <th><i class="fas fa-map-marker-alt"></i> Location</th>
+              <th><i class="fas fa-tag"></i> Category</th>
+              <th><i class="fas fa-cogs"></i> Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% services.forEach(service => { %>
+              <tr>
+                <td>
+                  <% if (service.image && service.image.url) { %>
+                    <img src="<%= service.image.url %>" alt="<%= service.title %>" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                  <% } else { %>
+                    <i class="fas fa-image fa-2x text-muted"></i>
+                  <% } %>
+                </td>
+                <td><strong><%= service.title %></strong></td>
+                <td><%= service.description.length > 50 ? service.description.substring(0, 50) + '...' : service.description %></td>
+                <td>₹<%= service.price %></td>
+                <td><%= service.location %></td>
+                <td><%= service.category %></td>
+                <td>
+                  <a href="/services/<%= service._id %>/edit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-edit"></i> Edit
+                  </a>
+                  <form action="/services/<%= service._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this service?');">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">No Services Yet!</h4>
+        <p>You haven't added any services yet. Start by adding your first service to attract customers.</p>
+        <hr>
+        <a href="/services/new" class="btn btn-primary">Add Your First Service</a>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
