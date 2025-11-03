@@ -1,106 +1,311 @@
-<%- include('../partials/header', { title: 'Earnings / Analytics' }) %>
+<%- include('../partials/header', { title: 'Earnings' }) %>
 
-<div class="row mb-4">
-  <div class="col-md-12">
-    <h2 class="mb-4"><i class="fas fa-chart-line"></i> Earnings / Analytics</h2>
-  </div>
+<div class="dashboard-header">
+  <h1><i class="fas fa-chart-line me-3"></i>Earnings Dashboard</h1>
+  <p>Track your income, analyze performance, and monitor financial growth.</p>
 </div>
 
-<div class="row mb-4">
-  <div class="col-md-3">
-    <div class="card text-center shadow-sm">
-      <div class="card-body">
-        <i class="fas fa-calendar fa-2x text-info mb-2"></i>
-        <h6>Total Bookings</h6>
-        <h3 class="text-info"><%= totalBookings %></h3>
+<div class="row g-4 mb-4">
+  <div class="col-lg-3 col-md-6">
+    <div class="card h-100 border-0 shadow-sm" style="background: var(--success-gradient) !important; color: white;">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-rupee-sign fa-3x opacity-75"></i>
+        </div>
+        <h2 class="mb-2 fw-bold">₹<%= totalRevenue.toFixed(2) %></h2>
+        <h6 class="mb-0 opacity-90">Total Earnings</h6>
+        <small class="opacity-75">Lifetime income</small>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card text-center shadow-sm">
-      <div class="card-body">
-        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
-        <h6>Completed</h6>
-        <h3 class="text-success"><%= completedBookings %></h3>
+  <div class="col-lg-3 col-md-6">
+    <div class="card h-100 border-0 shadow-sm" style="background: var(--primary-gradient) !important; color: white;">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-check-circle fa-3x opacity-75"></i>
+        </div>
+        <h2 class="mb-2 fw-bold"><%= completedBookings %></h2>
+        <h6 class="mb-0 opacity-90">Completed Jobs</h6>
+        <small class="opacity-75">Successful bookings</small>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card text-center shadow-sm">
-      <div class="card-body">
-        <i class="fas fa-clock fa-2x text-warning mb-2"></i>
-        <h6>Pending</h6>
-        <h3 class="text-warning"><%= pendingBookings %></h3>
+  <div class="col-lg-3 col-md-6">
+    <div class="card h-100 border-0 shadow-sm" style="background: var(--warning-gradient) !important; color: white;">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-clock fa-3x opacity-75"></i>
+        </div>
+        <h2 class="mb-2 fw-bold"><%= pendingBookings %></h2>
+        <h6 class="mb-0 opacity-90">Pending Payments</h6>
+        <small class="opacity-75">Awaiting completion</small>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card text-center shadow-sm">
-      <div class="card-body">
-        <i class="fas fa-rupee-sign fa-2x text-primary mb-2"></i>
-        <h6>Total Revenue</h6>
-        <h3 class="text-primary">₹<%= totalRevenue.toFixed(2) %></h3>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row mb-4">
-  <div class="col-md-6">
-    <div class="card text-center shadow-sm">
-      <div class="card-body">
-        <i class="fas fa-star fa-2x text-warning mb-2"></i>
-        <h6>Average Rating</h6>
-        <h3 class="text-warning"><%= feedbackSummary.averageRating ? feedbackSummary.averageRating.toFixed(1) : 'N/A' %></h3>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card text-center shadow-sm">
-      <div class="card-body">
-        <i class="fas fa-comments fa-2x text-info mb-2"></i>
-        <h6>Total Reviews</h6>
-        <h3 class="text-info"><%= feedbackSummary.totalFeedbacks %></h3>
+  <div class="col-lg-3 col-md-6">
+    <div class="card h-100 border-0 shadow-sm" style="background: var(--info-gradient) !important; color: white;">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-star fa-3x opacity-75"></i>
+        </div>
+        <h2 class="mb-2 fw-bold"><%= feedbackSummary.averageRating ? feedbackSummary.averageRating.toFixed(1) : 'N/A' %></h2>
+        <h6 class="mb-0 opacity-90">Average Rating</h6>
+        <small class="opacity-75">Customer feedback</small>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="card shadow-sm">
-      <div class="card-header bg-info text-white">
-        <h5 class="mb-0"><i class="fas fa-tools"></i> Services Performance</h5>
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-0 py-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+          <div>
+            <h5 class="mb-1 fw-bold text-dark"><i class="fas fa-history me-2 text-primary"></i>Recent Transactions</h5>
+            <p class="text-muted mb-0 small">Your latest completed bookings and earnings</p>
+          </div>
+          <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" id="periodFilter" style="width: auto;">
+              <option value="all">All Time</option>
+              <option value="month">This Month</option>
+              <option value="week">This Week</option>
+              <option value="today">Today</option>
+            </select>
+            <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search transactions..." style="width: 200px;">
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-        <% if (services.length > 0) { %>
+      <div class="card-body p-0">
+        <% if (recentBookings && recentBookings.length > 0) { %>
           <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover mb-0" id="earningsTable">
               <thead class="table-light">
                 <tr>
-                  <th><i class="fas fa-wrench"></i> Service</th>
-                  <th><i class="fas fa-rupee-sign"></i> Price</th>
+                  <th class="border-0 fw-semibold px-4 py-3"><i class="fas fa-tools me-2 text-muted"></i>Service</th>
+                  <th class="border-0 fw-semibold px-4 py-3"><i class="fas fa-user me-2 text-muted"></i>Customer</th>
+                  <th class="border-0 fw-semibold px-4 py-3"><i class="fas fa-calendar me-2 text-muted"></i>Date & Time</th>
+                  <th class="border-0 fw-semibold px-4 py-3"><i class="fas fa-rupee-sign me-2 text-muted"></i>Amount</th>
+                  <th class="border-0 fw-semibold px-4 py-3"><i class="fas fa-info-circle me-2 text-muted"></i>Status</th>
+                  <th class="border-0 fw-semibold px-4 py-3"><i class="fas fa-receipt me-2 text-muted"></i>Invoice</th>
                 </tr>
               </thead>
               <tbody>
-                <% services.forEach(s => { %>
-                  <tr>
-                    <td><%= s.title %></td>
-                    <td>₹<%= s.price %></td>
+                <% recentBookings.forEach(booking => { %>
+                  <tr class="align-middle earnings-row" data-status="<%= booking.status %>">
+                    <td class="px-4 py-3">
+                      <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                          <i class="fas fa-tools text-primary"></i>
+                        </div>
+                        <div>
+                          <div class="fw-semibold"><%= booking.serviceId ? booking.serviceId.title : 'Service' %></div>
+                          <small class="text-muted">ID: <%= booking._id.toString().slice(-6) %></small>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-3">
+                      <div class="d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 rounded-circle p-2 me-3">
+                          <i class="fas fa-user text-success"></i>
+                        </div>
+                        <div>
+                          <div class="fw-semibold"><%= booking.userId ? booking.userId.username : 'Customer' %></div>
+                          <small class="text-muted"><%= booking.userId ? booking.userId.email : '' %></small>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-3">
+                      <div class="fw-semibold"><%= new Date(booking.date).toLocaleDateString() %></div>
+                      <small class="text-muted"><i class="fas fa-clock me-1"></i><%= booking.time || 'N/A' %></small>
+                    </td>
+                    <td class="px-4 py-3">
+                      <div class="fw-bold text-success fs-5">₹<%= booking.serviceId ? booking.serviceId.price : 0 %></div>
+                      <small class="text-muted">Service fee</small>
+                    </td>
+                    <td class="px-4 py-3">
+                      <% if (booking.status === 'completed') { %>
+                        <span class="badge bg-success px-3 py-2">
+                          <i class="fas fa-check me-1"></i>Paid
+                        </span>
+                      <% } else if (booking.status === 'pending') { %>
+                        <span class="badge bg-warning text-dark px-3 py-2">
+                          <i class="fas fa-clock me-1"></i>Pending
+                        </span>
+                      <% } else if (booking.status === 'accepted') { %>
+                        <span class="badge bg-info px-3 py-2">
+                          <i class="fas fa-play me-1"></i>In Progress
+                        </span>
+                      <% } else { %>
+                        <span class="badge bg-secondary px-3 py-2">
+                          <i class="fas fa-question me-1"></i><%= booking.status %>
+                        </span>
+                      <% } %>
+                    </td>
+                    <td class="px-4 py-3">
+                      <% if (booking.status === 'completed') { %>
+                        <button class="btn btn-outline-primary btn-sm" onclick="viewInvoice('<%= booking._id %>')">
+                          <i class="fas fa-file-invoice me-1"></i>View
+                        </button>
+                      <% } else { %>
+                        <span class="text-muted small">N/A</span>
+                      <% } %>
+                    </td>
                   </tr>
                 <% }) %>
               </tbody>
             </table>
           </div>
         <% } else { %>
-          <div class="text-center">
-            <i class="fas fa-tools fa-3x text-muted mb-3"></i>
-            <p class="text-muted">No services listed yet.</p>
+          <div class="text-center py-5">
+            <div class="mb-4">
+              <i class="fas fa-chart-line fa-4x text-muted opacity-50"></i>
+            </div>
+            <h5 class="text-muted mb-2">No Earnings Yet</h5>
+            <p class="text-muted mb-4">You haven't completed any bookings yet. Start providing services to earn money!</p>
+            <a href="/services/new" class="btn btn-primary btn-lg">
+              <i class="fas fa-plus me-2"></i>Add Your First Service
+            </a>
           </div>
         <% } %>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Services Performance Section -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-0 py-4">
+        <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-chart-bar me-2 text-success"></i>Services Performance</h5>
+      </div>
+      <div class="card-body">
+        <% if (services && services.length > 0) { %>
+          <div class="row g-4">
+            <% services.forEach(service => { %>
+              <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card h-100 border-0 shadow-sm hover-lift">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                      <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                        <i class="fas fa-tools text-primary fa-lg"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-bold text-dark"><%= service.title %></h6>
+                        <small class="text-muted"><%= service.category %></small>
+                      </div>
+                    </div>
+                    <div class="row g-2">
+                      <div class="col-6">
+                        <div class="text-center p-2 bg-success bg-opacity-10 rounded">
+                          <div class="fw-bold text-success">₹<%= service.price %></div>
+                          <small class="text-muted">Price</small>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="text-center p-2 bg-info bg-opacity-10 rounded">
+                          <div class="fw-bold text-info"><%= service.views || 0 %></div>
+                          <small class="text-muted">Views</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="text-center py-5">
+            <div class="mb-4">
+              <i class="fas fa-tools fa-4x text-muted opacity-50"></i>
+            </div>
+            <h5 class="text-muted mb-2">No Services Yet</h5>
+            <p class="text-muted mb-4">Add your first service to start tracking performance!</p>
+            <a href="/services/new" class="btn btn-primary btn-lg">
+              <i class="fas fa-plus me-2"></i>Add Service
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Invoice Modal -->
+<div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold text-primary" id="invoiceModalLabel">
+          <i class="fas fa-file-invoice me-2"></i>Invoice Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="invoiceContent">
+        <!-- Invoice content will be loaded here -->
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="printInvoice()">
+          <i class="fas fa-print me-1"></i>Print Invoice
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+</style>
+
+<script>
+function viewInvoice(bookingId) {
+  // Placeholder for invoice viewing functionality
+  const modal = new bootstrap.Modal(document.getElementById('invoiceModal'));
+  document.getElementById('invoiceContent').innerHTML = `
+    <div class="text-center py-4">
+      <i class="fas fa-file-invoice fa-3x text-primary mb-3"></i>
+      <h6>Invoice for Booking #${bookingId.slice(-6)}</h6>
+      <p class="text-muted">Invoice generation feature coming soon!</p>
+    </div>
+  `;
+  modal.show();
+}
+
+function printInvoice() {
+  window.print();
+}
+
+// Filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const periodFilter = document.getElementById('periodFilter');
+  const searchInput = document.getElementById('searchInput');
+  const tableRows = document.querySelectorAll('.earnings-row');
+
+  function filterEarnings() {
+    const periodValue = periodFilter.value;
+    const searchValue = searchInput.value.toLowerCase();
+
+    tableRows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const searchMatch = !searchValue || text.includes(searchValue);
+
+      // For now, show all rows (period filtering would need date logic)
+      row.style.display = searchMatch ? '' : 'none';
+    });
+  }
+
+  if (periodFilter) periodFilter.addEventListener('change', filterEarnings);
+  if (searchInput) searchInput.addEventListener('input', filterEarnings);
+});
+</script>
 
 <%- include('../partials/footer') %>

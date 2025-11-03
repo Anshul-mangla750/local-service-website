@@ -1,51 +1,213 @@
- <footer class=" text-white pt-5 pb-4 footer" style=" background-Color: #2c3e50">
-      <div class="container text-center text-md-start">
-        
+<footer class="text-white py-5 position-relative overflow-hidden" style="background: var(--dark-gradient); margin-top: 4rem;">
+  <!-- Background Pattern -->
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%);"></div>
 
-        <div class="row text-md-start text-center">
-          <div class="col-md-3 mb-4">
-            <h5 class="fw-bold d-flex align-items-center gap-2">
-            <span className="  d-inline-block" style="width: 24px;  height: 24px">
-                <i class="fa-solid fa-house-user"></i>
-                
-              </span>
+  <div class="container position-relative">
+    <div class="row text-center text-md-start">
+      <!-- Brand Section -->
+      <div class="col-md-4 mb-4">
+        <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+          <div class="bg-white bg-opacity-10 p-3 rounded-circle me-3" style="backdrop-filter: blur(10px);">
+            <i class="fa-solid fa-house-user text-white" style="font-size: 2rem;"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-0" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.8rem;">
               ServiceHub
             </h5>
-            <p>Your trusted platform for finding and booking local services.</p>
-          </div>
-
-          <div class="col-md-3 mb-4">
-            <h6 class="fw-bold">For Customers</h6>
-            <ul class="list-unstyled ">
-              <li><a href="#" class="text-white   text-decoration-none">Browse Services</a></li>
-              <li><a href="#" class="text-white text-decoration-none">How It Works</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Support</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Reviews</a></li>
-            </ul>
-          </div>
-
-          <div class="col-md-3 mb-4">
-            <h6 class="fw-bold">For Providers</h6>
-            <ul class="list-unstyled">
-              <li><a href="#" class="text-white text-decoration-none">Join as Provider</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Provider Resources</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Success Stories</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Tools & Support</a></li>
-            </ul>
-          </div>
-
-          <div class="col-md-3 mb-4">
-            <h6 class="fw-bold">Company</h6>
-            <ul class="list-unstyled">
-              <li><a href="#" class="text-white text-decoration-none">About Us</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Careers</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
-              <li><a href="#" class="text-white text-decoration-none">Terms of Service</a></li>
-            </ul>
+            <small class="text-white-50">Connecting Communities</small>
           </div>
         </div>
+        <p class="text-white-50 mb-3" style="line-height: 1.6;">Your trusted platform for finding and booking local services. Quality service providers at your fingertips.</p>
+        <div class="d-flex justify-content-center justify-content-md-start gap-3">
+          <a href="#" class="text-white-50 hover-lift" style="font-size: 1.5rem; transition: all 0.3s ease;">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-white-50 hover-lift" style="font-size: 1.5rem; transition: all 0.3s ease;">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-white-50 hover-lift" style="font-size: 1.5rem; transition: all 0.3s ease;">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-white-50 hover-lift" style="font-size: 1.5rem; transition: all 0.3s ease;">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
       </div>
-      <div class="text-center mt-4">
-        <small>© 2025 ServiceHub. All rights reserved.</small>
+
+      <!-- Quick Links -->
+      <div class="col-md-2 mb-4">
+        <h6 class="fw-bold mb-3 position-relative">
+          <span style="background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">For Customers</span>
+          <div style="height: 2px; width: 30px; background: var(--accent-gradient); margin-top: 5px;"></div>
+        </h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="/" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-search me-2"></i>Browse Services
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-cogs me-2"></i>How It Works
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-headset me-2"></i>Support
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-star me-2"></i>Reviews
+            </a>
+          </li>
+        </ul>
       </div>
-    </footer>
+
+      <div class="col-md-2 mb-4">
+        <h6 class="fw-bold mb-3 position-relative">
+          <span style="background: var(--success-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">For Providers</span>
+          <div style="height: 2px; width: 30px; background: var(--success-gradient); margin-top: 5px;"></div>
+        </h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="/signup" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-user-plus me-2"></i>Join as Provider
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-book me-2"></i>Resources
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-trophy me-2"></i>Success Stories
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-tools me-2"></i>Tools & Support
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-2 mb-4">
+        <h6 class="fw-bold mb-3 position-relative">
+          <span style="background: var(--warning-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Company</span>
+          <div style="height: 2px; width: 30px; background: var(--warning-gradient); margin-top: 5px;"></div>
+        </h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-info-circle me-2"></i>About Us
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-briefcase me-2"></i>Careers
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-shield-alt me-2"></i>Privacy Policy
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="#" class="text-white-50 text-decoration-none footer-link">
+              <i class="fas fa-file-contract me-2"></i>Terms of Service
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="col-md-2 mb-4">
+        <h6 class="fw-bold mb-3 position-relative">
+          <span style="background: var(--secondary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Stay Updated</span>
+          <div style="height: 2px; width: 30px; background: var(--secondary-gradient); margin-top: 5px;"></div>
+        </h6>
+        <p class="text-white-50 small mb-3">Subscribe to our newsletter for the latest updates and offers.</p>
+        <div class="input-group">
+          <input type="email" class="form-control bg-white bg-opacity-10 border-0 text-white" placeholder="Your email" style="backdrop-filter: blur(10px);">
+          <button class="btn" type="button" style="background: var(--primary-gradient); border: none;">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <p class="mb-0 text-white-50 small">
+          <i class="fas fa-copyright me-1"></i>2025 ServiceHub. All rights reserved.
+        </p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <div class="d-flex justify-content-center justify-content-md-end gap-3">
+          <small class="text-white-50">
+            <i class="fas fa-shield-alt me-1"></i>Secure & Trusted
+          </small>
+          <small class="text-white-50">
+            <i class="fas fa-award me-1"></i>Quality Assured
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer-link {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.footer-link:hover {
+  color: var(--text-light) !important;
+  transform: translateX(5px);
+}
+
+.footer-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gradient);
+  transition: width 0.3s ease;
+}
+
+.footer-link:hover::before {
+  width: 100%;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+  color: var(--text-light) !important;
+}
+
+.input-group .form-control:focus {
+  background: var(--bg-white) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+}
+
+@media (max-width: 768px) {
+  .footer-link {
+    font-size: 0.9rem;
+  }
+
+  .footer-link:hover {
+    transform: none;
+  }
+
+  .footer-link::before {
+    display: none;
+  }
+}
+</style>

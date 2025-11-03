@@ -1,117 +1,358 @@
 <% layout('/layouts/boilerplate.ejs') -%>
-<body>
-  <div class="container">
-    <div class="row offset-1">
-      <h1>edit the deatils</h1>
+
+<style>
+  .edit-service-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 2rem 0;
+  }
+
+  .edit-service-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: none;
+    overflow: hidden;
+    max-width: 800px;
+    width: 100%;
+    margin: 2rem auto;
+  }
+
+  .edit-service-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .edit-service-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .edit-service-header h1 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-weight: 700;
+    font-size: 2rem;
+  }
+
+  .edit-service-header p {
+    position: relative;
+    z-index: 1;
+    margin: 0.5rem 0 0 0;
+    opacity: 0.9;
+  }
+
+  .edit-service-body {
+    padding: 3rem;
+  }
+
+  .form-floating > label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: var(--border-radius);
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .form-select {
+    border: 2px solid #e9ecef;
+    border-radius: var(--border-radius);
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .file-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .file-upload-area:hover {
+    border-color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.05);
+  }
+
+  .file-upload-area.dragover {
+    border-color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.1);
+  }
+
+  .current-image-preview {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-top: 1rem;
+  }
+
+  .btn-update {
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
+    width: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-update::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-update:hover::before {
+    left: 100%;
+  }
+
+  .btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .form-section {
+    background: #f8f9fa;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--primary-color);
+  }
+
+  .form-section h4 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+
+  .invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  .image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .image-section .current-image {
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .edit-service-container {
+      padding: 1rem;
+    }
+
+    .edit-service-card {
+      margin: 1rem;
+    }
+
+    .edit-service-header {
+      padding: 1.5rem;
+    }
+
+    .edit-service-body {
+      padding: 2rem 1.5rem;
+    }
+  }
+</style>
+
+<div class="edit-service-container">
+  <div class="edit-service-card">
+    <div class="edit-service-header">
+      <i class="fas fa-edit" style="font-size: 3rem; color: rgba(255,255,255,0.9); margin-bottom: 1rem;"></i>
+      <h1>Edit Service</h1>
+      <p>Update your service information</p>
     </div>
-    <div class="row offset-1">
-      <div class="col-8">
-        <form
-          action="/services/<%=service._id%>?_method=PUT"
-          method="POST"
-          class="needs-validation"
-          novalidate
-          enctype="multipart/form-data"
-        >
-          <div class="form-floating mb-3">
-            <input
-              type="text"
-              class="form-control"
-              id="title"
-              name="title"
-              placeholder="enter the service name"
-              value="<%=service.title%>"
-              required
-            />
-            <label for="title" class="form-label">title:</label>
-            <div class="invalid-feedback">
-              please enter a title of the service!
+    <div class="edit-service-body">
+      <form action="/services/<%= service._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <!-- Basic Information -->
+        <div class="form-section">
+          <h4><i class="fas fa-info-circle me-2"></i>Basic Information</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="title" name="title" placeholder="Service Title" value="<%= service.title %>" required>
+                <label for="title">
+                  <i class="fas fa-tag me-2"></i>Service Title
+                </label>
+                <div class="invalid-feedback">Please enter a title for your service.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="price" name="price" placeholder="Price" value="<%= service.price %>" min="0" step="0.01" required>
+                <label for="price">
+                  <i class="fas fa-rupee-sign me-2"></i>Price (₹)
+                </label>
+                <div class="invalid-feedback">Please enter a valid price.</div>
+              </div>
             </div>
           </div>
+          <div class="form-floating mb-3">
+            <textarea class="form-control" placeholder="Describe your service in detail" id="description" name="description" style="height: 120px" required><%= service.description %></textarea>
+            <label for="description">
+              <i class="fas fa-align-left me-2"></i>Description
+            </label>
+            <div class="invalid-feedback">Please provide a description of your service.</div>
+          </div>
+        </div>
 
-          <div class="form-floating">
-            <textarea
-              class="form-control mb-3"
-              placeholder="describe your service here"
-              id="textarea"
-              name="description"
-              required
-            >
-<%=service.description%></textarea
-            >
-            <label for="textarea">description</label>
-            <div class="invalid-feedback">
-              give a small description about your service!
+        <!-- Location & Category -->
+        <div class="form-section">
+          <h4><i class="fas fa-map-marker-alt me-2"></i>Location & Category</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Service Location" value="<%= service.location %>" required>
+                <label for="location">
+                  <i class="fas fa-map-marker-alt me-2"></i>Location
+                </label>
+                <div class="invalid-feedback">Please enter the service location.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <select class="form-select" id="category" name="category" required>
+                  <option value="<%= service.category %>" selected><%= service.category %></option>
+                  <option value="Home Repair">🏠 Home Repair</option>
+                  <option value="Cleaning">🧹 Cleaning</option>
+                  <option value="Appliance Repair">🔧 Appliance Repair</option>
+                  <option value="Tailoring">👕 Tailoring</option>
+                  <option value="Electronics Repair">📱 Electronics Repair</option>
+                  <option value="Automotive">🚗 Automotive</option>
+                  <option value="Security">🔒 Security</option>
+                  <option value="Education">📚 Education</option>
+                  <option value="Gardening">🌱 Gardening</option>
+                </select>
+                <label for="category">
+                  <i class="fas fa-tags me-2"></i>Category
+                </label>
+                <div class="invalid-feedback">Please select a category for your service.</div>
+              </div>
             </div>
           </div>
-          <div class="mb-3">
-            orignal uploaded image <br>
-            
-            <img src="<%=service.image.url%>" alt="" height="100px"/>
-          </div>
-          <div class="form-floating mb-3">
-            <input
-              type="file"
-              class="form-control"
-              id="image"
-              name="image"
-              placeholder="Enter url of image"
-            />
-            <label for="image" class="form-label">Upload new image</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input
-              type="number"
-              class="form-control"
-              id="price"
-              name="price"
-              placeholder="price"
-              value="<%=service.price%>"
-              required
-            />
-            <label for="price" class="form-label">price:</label>
-            <div class="invalid-feedback">enter price of the service.</div>
-          </div>
+        </div>
 
-          <div class="form-floating mb-3">
-            <input
-              type="text"
-              class="form-control"
-              id="location"
-              name="location"
-              placeholder="enter the location"
-              value="<%=service.location%>"
-              required
-            />
-            <label for="location" class="form-label">location:</label>
-            <div class="invalid-feedback">
-              enter a location for the service.
+        <!-- Image Upload -->
+        <div class="form-section">
+          <h4><i class="fas fa-camera me-2"></i>Service Image</h4>
+          <div class="image-section">
+            <div class="current-image">
+              <p class="text-muted mb-2">Current Image:</p>
+              <img src="<%= service.image.url %>" alt="Current service image" class="current-image-preview">
+            </div>
+            <div class="file-upload-area w-100" onclick="document.getElementById('image').click()">
+              <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+              <h5>Upload New Image (Optional)</h5>
+              <p class="text-muted">Click to browse or drag and drop a new image here</p>
+              <input type="file" class="form-control d-none" id="image" name="image" accept="image/*">
             </div>
           </div>
-          <div class="form-floating mb-3">
-            <select
-              class="form-control"
-              id="category"
-              name="category"
-              required
-            >
-              <option value="">Select a category</option>
-              <option value="Home Repair" <%= service.category === 'Home Repair' ? 'selected' : '' %>>Home Repair</option>
-              <option value="Cleaning" <%= service.category === 'Cleaning' ? 'selected' : '' %>>Cleaning</option>
-              <option value="Appliance Repair" <%= service.category === 'Appliance Repair' ? 'selected' : '' %>>Appliance Repair</option>
-              <option value="Tailoring" <%= service.category === 'Tailoring' ? 'selected' : '' %>>Tailoring</option>
-              <option value="Electronics Repair" <%= service.category === 'Electronics Repair' ? 'selected' : '' %>>Electronics Repair</option>
-              <option value="Automotive" <%= service.category === 'Automotive' ? 'selected' : '' %>>Automotive</option>
-              <option value="Security" <%= service.category === 'Security' ? 'selected' : '' %>>Security</option>
-              <option value="Education" <%= service.category === 'Education' ? 'selected' : '' %>>Education</option>
-              <option value="Gardening" <%= service.category === 'Gardening' ? 'selected' : '' %>>Gardening</option>
-            </select>
-            <label for="category" class="form-label">category:</label>
-            <div class="invalid-feedback">select a category for the service.</div>
-          </div>
-          <button>edit details</button>
-        </form>
-      </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-update">
+          <i class="fas fa-save me-2"></i>Update Service
+        </button>
+      </form>
     </div>
   </div>
-</body>
+</div>
+
+<script>
+  // File upload preview
+  document.getElementById('image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const uploadArea = document.querySelector('.file-upload-area');
+      uploadArea.innerHTML = `
+        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+        <h5>New Image Selected</h5>
+        <p class="text-muted">${file.name}</p>
+        <input type="file" class="form-control d-none" id="image" name="image" accept="image/*">
+      `;
+    }
+  });
+
+  // Drag and drop functionality
+  const uploadArea = document.querySelector('.file-upload-area');
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, preventDefaults, false);
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, highlight, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    uploadArea.addEventListener(eventName, unhighlight, false);
+  });
+
+  function highlight(e) {
+    uploadArea.classList.add('dragover');
+  }
+
+  function unhighlight(e) {
+    uploadArea.classList.remove('dragover');
+  }
+
+  uploadArea.addEventListener('drop', handleDrop, false);
+
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    document.getElementById('image').files = files;
+    const event = new Event('change');
+    document.getElementById('image').dispatchEvent(event);
+  }
+</script>

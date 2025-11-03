@@ -820,9 +820,9 @@ async function startServer() {
     isLoggedIn,
     isProvider,
     asyncWrap(async (req, res) => {
-      const services = await Service.find({ owner: req.user._id }).select("_id title price");
+      const services = await Service.find({ owner: req.user._id }).select("_id title price category");
       const serviceIds = services.map((s) => s._id);
-      const bookings = await Booking.find({ serviceId: { $in: serviceIds } }).populate("serviceId");
+      const bookings = await Booking.find({ serviceId: { $in: serviceIds } }).populate("serviceId userId");
 
       // analytics:
       const totalBookings = bookings.length;
@@ -839,6 +839,15 @@ async function startServer() {
           totalRevenue += Number(priceMap[sid] || 0);
         }
       });
+
+      // Calculate average earning per booking
+      const averageEarning = completedBookings > 0 ? totalRevenue / completedBookings : 0;
+
+      // Recent bookings (last 10 completed bookings)
+      const recentBookings = bookings
+        .filter(b => b.status === "completed")
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 10);
 
       // Calculate feedback summary from reviews
       const Review = require("./models/reviews.js");
@@ -861,6 +870,8 @@ async function startServer() {
         completedBookings,
         pendingBookings,
         totalRevenue,
+        averageEarning,
+        recentBookings,
         feedbackSummary,
       });
     })

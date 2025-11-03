@@ -1,32 +1,87 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" style="background-Color: #e3f2fd">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-lg" style="background: var(--primary-gradient); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#"><i class="fa-solid fa-house-user"></i> ServiceHub</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="/" style="font-size: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+      <i class="fa-solid fa-house-user me-2" style="font-size: 1.8rem;"></i>
+      <span>ServiceHub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background: rgba(255,255,255,0.1);">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-      <ul class="navbar-nav mb-2 mb-lg-0 ">
-        <li class="nav-item mx-5">
-          <a class="nav-link active" aria-current="page" href="https://local-service-website.onrender.com/">Home</a>
+      <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+        <li class="nav-item mx-3">
+          <a class="nav-link fw-semibold px-3 py-2 rounded-pill" aria-current="page" href="/" style="transition: all 0.3s ease; background: rgba(255,255,255,0.1);">
+            <i class="fas fa-home me-1"></i>Home
+          </a>
         </li>
-        <li class="nav-item mx-3 ">
-          <a class="nav-link " href="#">Support</a>
+        <li class="nav-item mx-3">
+          <a class="nav-link fw-semibold px-3 py-2 rounded-pill" href="#" style="transition: all 0.3s ease;">
+            <i class="fas fa-headset me-1"></i>Support
+          </a>
         </li>
       <% if(!currUser){ %>
-         <li class="nav-item mx-5 ">
-          <a class="nav-link" aria-disabled="true" href="/signup"> Sign up</a>
+         <li class="nav-item mx-3">
+          <a class="nav-link fw-semibold px-3 py-2 rounded-pill" href="/signup" style="transition: all 0.3s ease;">
+            <i class="fas fa-user-plus me-1"></i>Sign Up
+          </a>
+         </li>
+         <li class="nav-item">
+          <a class="btn fw-bold px-4 py-2" href="/login" role="button" style="background: var(--success-gradient); border: none; box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3);">
+            <i class="fas fa-sign-in-alt me-1"></i>Log In
+          </a>
         </li>
-         <li class="nav-item ">
-          <a class="btn btn-primary bg-success" href="/login" role="button">Log In</a>
-        </li>
-
       <% } else { %>
-          <div class="dropdown ms-auto">
-            <button class="btn btn-dark btn-edit " ><a class="dropdown-item" href="/logout">LogOut</a></button>
+          <div class="dropdown ms-3">
+            <button class="btn fw-bold px-4 py-2 dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: var(--accent-gradient); border: none; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);">
+              <i class="fas fa-user-circle me-1"></i><%= currUser.username %>
+            </button>
+            <ul class="dropdown-menu shadow-lg border-0" aria-labelledby="userDropdown" style="background: var(--bg-white);">
+              <% if(currUser.role === 'provider'){ %>
+                <li><a class="dropdown-item py-2" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+              <% } else { %>
+                <li><a class="dropdown-item py-2" href="/user/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+              <% } %>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item py-2 text-danger" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
           </div>
         <% } %>
-
       </ul>
     </div>
   </div>
 </nav>
+
+<style>
+.navbar-nav .nav-link:hover {
+  background: rgba(255,255,255,0.2) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+  text-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: var(--primary-gradient);
+  color: var(--text-light) !important;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: rgba(0,0,0,0.1);
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 0.5rem 0;
+  }
+
+  .navbar-nav .nav-link {
+    background: rgba(255,255,255,0.1) !important;
+  }
+}
+</style>

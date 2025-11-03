@@ -5,72 +5,275 @@
   <title><%= title || "User Dashboard" %></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- <link rel="stylesheet" href="/css/style.css"> -->
   <style>
+    :root {
+      --sidebar-width: 280px;
+      --sidebar-bg: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      --sidebar-hover: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --sidebar-active: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --success-gradient: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+      --warning-gradient: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+      --danger-gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    }
+
     .sidebar {
       height: 100vh;
       position: fixed;
       top: 0;
       left: 0;
-      width: 250px;
-      background-color: #343a40;
-      padding-top: 60px;
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      padding-top: 80px;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      overflow-y: auto;
     }
-    .sidebar a {
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+    }
+
+    .sidebar .navbar-brand {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: var(--sidebar-active);
       color: #ffffff;
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+
+    .sidebar .navbar-brand i {
+      font-size: 1.8rem;
+      margin-right: 10px;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      padding: 20px 0;
+      margin: 0;
+    }
+
+    .sidebar-nav li {
+      margin: 5px 15px;
+    }
+
+    .sidebar-nav a {
+      color: rgba(255,255,255,0.8);
       padding: 15px 20px;
       text-decoration: none;
-      display: block;
-      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
     }
-    .sidebar a:hover {
-      background-color: #495057;
+
+    .sidebar-nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--sidebar-hover);
+      transition: left 0.4s ease;
+      z-index: -1;
     }
-    .sidebar .navbar-brand {
+
+    .sidebar-nav a:hover::before,
+    .sidebar-nav a.active::before {
+      left: 0;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
       color: #ffffff;
-      font-size: 1.5rem;
-      padding: 20px;
-      display: block;
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .sidebar-nav a i {
+      margin-right: 12px;
+      font-size: 1.2rem;
+      width: 20px;
       text-align: center;
     }
+
     .content {
-      margin-left: 250px;
-      padding: 20px;
+      margin-left: var(--sidebar-width);
+      padding: 30px;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     }
+
     .navbar-top {
-      margin-left: 250px;
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #dee2e6;
+      margin-left: var(--sidebar-width);
+      background: var(--bg-white);
+      border-bottom: 2px solid rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 15px 30px;
+      /* position: fixed; */
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 100;
+      height: 80px;
     }
+
     .navbar-top .navbar-brand {
-      color: #343a40;
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: var(--secondary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .dashboard-header {
+      margin-bottom: 30px;
+      padding: 30px;
+      background: var(--bg-white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-light);
+      border-left: 4px solid var(--secondary-color);
+    }
+
+    .dashboard-header h1 {
+      color: var(--text-primary);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .content {
+        margin-left: 0;
+      }
+
+      .navbar-top {
+        margin-left: 0;
+        left: 0;
+      }
+
+      .sidebar-toggle {
+        display: block !important;
+      }
+    }
+
+    .sidebar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+      padding: 10px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-toggle:hover {
+      background: rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body class="bg-light">
   <!-- Sidebar -->
-  <div class="sidebar">
-    <a class="navbar-brand" href="/user/dashboard">ServiceHub User</a>
-    <a href="/user/dashboard"><i class="fas fa-home"></i> Dashboard</a>
-    <a href="/services"><i class="fas fa-tools"></i> Services</a>
-    <a href="/user/dashboard/bookings"><i class="fas fa-calendar"></i> My Bookings</a>
-    <a href="/user/dashboard/favorites"><i class="fas fa-heart"></i> Favorites</a>
-    <a href="/user/dashboard/wallet"><i class="fas fa-wallet"></i> Wallet</a>
-    <a href="/user/dashboard/reviews"><i class="fas fa-star"></i> Reviews</a>
-    <a href="/user/dashboard/settings"><i class="fas fa-cog"></i> Settings</a>
-    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  <div class="sidebar" id="sidebar">
+    <a class="navbar-brand" href="/user/dashboard">
+      <i class="fa-solid fa-house-user"></i>
+      ServiceHub
+    </a>
+    <ul class="sidebar-nav">
+      <li><a href="/user/dashboard" class="<%= title && title.toLowerCase().includes('dashboard') ? 'active' : '' %>"><i class="fas fa-home"></i>Dashboard</a></li>
+      <li><a href="/services"><i class="fas fa-search"></i>Browse Services</a></li>
+      <li><a href="/user/dashboard/bookings" class="<%= title && title.toLowerCase().includes('booking') ? 'active' : '' %>"><i class="fas fa-calendar-check"></i>My Bookings</a></li>
+      <li><a href="/user/dashboard/favorites" class="<%= title && title.toLowerCase().includes('favorite') ? 'active' : '' %>"><i class="fas fa-heart"></i>Favorites</a></li>
+      <li><a href="/user/dashboard/wallet" class="<%= title && title.toLowerCase().includes('wallet') ? 'active' : '' %>"><i class="fas fa-wallet"></i>Wallet</a></li>
+      <li><a href="/user/dashboard/reviews" class="<%= title && title.toLowerCase().includes('review') ? 'active' : '' %>"><i class="fas fa-star"></i>Reviews</a></li>
+      <li><a href="/user/dashboard/settings" class="<%= title && title.toLowerCase().includes('setting') ? 'active' : '' %>"><i class="fas fa-cog"></i>Settings</a></li>
+      <li><hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;"></li>
+      <li><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+    </ul>
   </div>
 
   <!-- Top Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-top">
-    <div class="container-fluid">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <button class="sidebar-toggle d-md-none" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
       <span class="navbar-brand mb-0 h1"><%= title || "User Dashboard" %></span>
+      <div class="d-flex align-items-center">
+        <div class="dropdown me-3">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="notificationDropdown" data-bs-toggle="dropdown">
+            <i class="fas fa-bell"></i>
+            <span class="badge bg-danger rounded-pill ms-1">2</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Booking confirmed</a></li>
+            <li><a class="dropdown-item" href="#">New service available</a></li>
+          </ul>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-outline-success dropdown-toggle" type="button" id="walletDropdown" data-bs-toggle="dropdown">
+            <i class="fas fa-wallet"></i>
+            <span class="badge bg-success rounded-pill ms-1">$250</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/user/dashboard/wallet">View Wallet</a></li>
+            <li><a class="dropdown-item" href="#">Add Funds</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </nav>
 
   <div class="content">
     <% if (success && success.length > 0) { %>
-      <div class="alert alert-success"><%= success %></div>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i><%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
     <% } %>
     <% if (error && error.length > 0) { %>
-      <div class="alert alert-danger"><%= error %></div>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i><%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
     <% } %>

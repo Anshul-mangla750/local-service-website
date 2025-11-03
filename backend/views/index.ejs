@@ -1,75 +1,557 @@
 <% layout('/layouts/boilerplate.ejs') -%>
-<body>
+
+<style>
+  .services-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 2rem 0;
+  }
+
+  .services-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .services-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .services-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+  }
+
+  .services-header p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .search-section {
+    background: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .search-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--primary-gradient);
+    border-radius: var(--border-radius-lg);
+    opacity: 0.05;
+  }
+
+  .search-form {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    border: 2px solid #e9ecef;
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    background: white;
+  }
+
+  .search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .category-select {
+    border: 2px solid #e9ecef;
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: white;
+    min-width: 200px;
+  }
+
+  .category-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .search-button {
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
+    margin-left: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .search-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .search-button:hover::before {
+    left: 100%;
+  }
+
+  .search-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .clear-button {
+    background: transparent;
+    border: 2px solid #6c757d;
+    border-radius: var(--border-radius);
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-left: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .clear-button:hover {
+    background: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .category-header {
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: var(--border-radius);
+    padding: 1rem 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .category-header h2 {
+    color: var(--primary-color);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .category-header a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .category-header a:hover {
+    text-decoration: underline;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .service-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--primary-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .service-card:hover::before {
+    opacity: 0.05;
+  }
+
+  .service-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+  }
+
+  .service-content {
+    padding: 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .service-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .service-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.5;
+  }
+
+  .service-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .service-location {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .service-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+
+  .service-category {
+    display: inline-block;
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .service-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-details {
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-details::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-details:hover::before {
+    left: 100%;
+  }
+
+  .btn-details:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn-book {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-book::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-book:hover::before {
+    left: 100%;
+  }
+
+  .btn-book:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .create-service-section {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn-create-service {
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-create-service::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-create-service:hover::before {
+    left: 100%;
+  }
+
+  .btn-create-service:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .no-services {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+  }
+
+  .no-services i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  .no-services h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .services-container {
+      padding: 1rem;
+    }
+
+    .services-header h1 {
+      font-size: 2.5rem;
+    }
+
+    .services-header p {
+      font-size: 1.1rem;
+    }
+
+    .search-section {
+      padding: 1.5rem;
+    }
+
+    .search-form {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .search-button,
+    .clear-button {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .services-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .service-content {
+      padding: 1.25rem;
+    }
+
+    .service-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="services-container">
   <div class="container">
-    <!-- Search and Filter Form -->
-    <div class="row mb-4">
-      <div class="col-md-12">
-        <form method="GET" action="/services" class="d-flex align-items-center">
-          <div class="me-3">
-            <input
-              type="text"
-              name="search"
-              class="form-control"
-              placeholder="Search services..."
-              value="<%= search || '' %>"
-            />
-          </div>
-          <div class="me-3">
-            <select name="category" class="form-select">
-              <option value="">All Categories</option>
-              <% categories.forEach(cat => { %>
-                <option value="<%= cat %>" <%= category === cat ? 'selected' : '' %>><%= cat %></option>
-              <% }); %>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-primary me-2">Search</button>
-          <a href="/services" class="btn btn-secondary">Clear</a>
-        </form>
-      </div>
+    <div class="services-header">
+      <h1>Discover Services</h1>
+      <p>Find the perfect service provider for your needs from our curated collection</p>
+    </div>
+
+    <div class="search-section">
+      <form method="GET" action="/services" class="search-form d-flex align-items-center flex-wrap gap-3">
+        <input
+          type="text"
+          name="search"
+          class="search-input flex-grow-1"
+          placeholder="Search services..."
+          value="<%= search || '' %>"
+        />
+        <select name="category" class="category-select">
+          <option value="">All Categories</option>
+          <% categories.forEach(cat => { %>
+            <option value="<%= cat %>" <%= category === cat ? 'selected' : '' %>><%= cat %></option>
+          <% }); %>
+        </select>
+        <button type="submit" class="search-button">
+          <i class="fas fa-search me-2"></i>Search
+        </button>
+        <a href="/services" class="clear-button">
+          <i class="fas fa-times me-2"></i>Clear
+        </a>
+      </form>
     </div>
 
     <% if(category){ %>
-      <h2>Services in category: <%= category %></h2>
-      <a href="/services">View all services</a>
-    <% } else { %>
-      <h2>All Services</h2>
-    <% } %>
-    <div class="row">
-      <% for(service of services){ %>
-      <div class="card" style="width: 18rem">
-        <a href="/services/<%= service._id %>">
-          <img
-            src="<%= service.image.url %>"
-            class="card-img-top"
-            alt="service image"
-          />
-        </a>
-        <div class="card-body">
-          <h5 class="card-title"><%=service.title%></h5>
-          <p class="card-text"><%=service.description%></p>
-        </div>
-
-        <div class="card-body">
-          <a href="/services/<%=service._id%>" class="btn btn-primary"
-            >details</a
-          >
-          <a href="/services/<%=service._id%>/book" class="btn btn-primary"
-            >book now</a
-          >
-        </div>
+      <div class="category-header">
+        <h2>Services in category: <%= category %></h2>
+        <a href="/services">View all services</a>
       </div>
+    <% } %>
 
-      <% } %>
-    </div>
+    <% if (services && services.length > 0) { %>
+      <div class="services-grid">
+        <% for(service of services){ %>
+          <div class="service-card">
+            <a href="/services/<%= service._id %>">
+              <img
+                src="<%= service.image.url %>"
+                class="service-image"
+                alt="service image"
+              />
+            </a>
+            <div class="service-content">
+              <span class="service-category"><%= service.category %></span>
+              <h3 class="service-title"><%= service.title %></h3>
+              <p class="service-description"><%= service.description %></p>
+              <div class="service-meta">
+                <span class="service-location">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <%= service.location %>
+                </span>
+                <span class="service-price">₹<%= service.price %></span>
+              </div>
+              <div class="service-actions">
+                <a href="/services/<%= service._id %>" class="btn-details">
+                  <i class="fas fa-eye me-1"></i>Details
+                </a>
+                <a href="/services/<%= service._id %>/book" class="btn-book">
+                  <i class="fas fa-calendar-check me-1"></i>Book Now
+                </a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="no-services">
+        <i class="fas fa-search"></i>
+        <h3>No services found</h3>
+        <p>Try adjusting your search criteria or check back later for new services.</p>
+      </div>
+    <% } %>
+
+    <% if(currUser && currUser.role === 'provider'){ %>
+      <div class="create-service-section">
+        <h3>Ready to offer your services?</h3>
+        <p>Join our community of service providers and start earning today!</p>
+        <a href="/services/new" class="btn-create-service">
+          <i class="fas fa-plus-circle"></i>
+          Create New Service
+        </a>
+      </div>
+    <% } %>
   </div>
-  <% if(currUser && currUser.role === 'provider'){ %>
-  <form action="/services/new" method="GET">
-    <button>create new service</button>
-  </form>
-  <% } %>
-
-  <img
-    src="https://unsplash.com/photos/working-contractor-electrician-fixing-the-light-fsBhBDjxT-4"
-    alt=""
-  />
-</body>
+</div>
