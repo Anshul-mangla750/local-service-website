@@ -203,6 +203,9 @@ async function startServer() {
     upload.single("image"),
     validateListing,
     asyncWrap(async (req, res) => {
+      console.log("POST /services route hit");
+      console.log("Request body:", req.body);
+      console.log("Uploaded file:", req.file);
       // safely handle file presence
       const newServiceData = {
         title: req.body.title,
@@ -212,6 +215,8 @@ async function startServer() {
         category: req.body.category,
         owner: req.user ? req.user._id : undefined,
       };
+
+      console.log("New service data:", newServiceData);
 
       if (req.file) {
         newServiceData.image = { url: req.file.path, filename: req.file.filename };
