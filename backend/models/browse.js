@@ -20,10 +20,7 @@ const ServiceSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
     }
-
-
-
-});
+}, { timestamps: true });
 
 const Service = mongoose.model("Service",ServiceSchema);
 module.exports = Service;

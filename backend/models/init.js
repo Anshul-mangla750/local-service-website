@@ -1,30 +1,42 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const mongoose = require("mongoose");
 
 const Service = require("./browse.js");
 
-const MONGO_URL = "mongodb+srv://anshulmangla143_db_user:YyKavEo7afFoo7SW@cluster0.bakksmx.mongodb.net/?appName=Cluster0";
+const DEFAULT_LOCAL_MONGO_URL = "mongodb://127.0.0.1:27017/service-hub";
+const MONGO_URL = process.env.MONGO_URL || DEFAULT_LOCAL_MONGO_URL;
 
-// const MONGO_URL = "mongodb://localhost:27017/database_name";
+let connectionPromise;
 
-// Connect to MongoDB with a longer timeout
 async function main() {
-    try {
-        await mongoose.connect(MONGO_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            // useCreateIndex: true,
-        });
-        console.log('Server connected to MongoDb!');
-    } catch (err) {
-      
-        console.error(err);
-    }
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
 
+  if (!connectionPromise) {
+    connectionPromise = mongoose
+      .connect(MONGO_URL)
+      .then((connection) => {
+        console.log("Server connected to MongoDB!");
+        return connection;
+      })
+      .catch((err) => {
+        connectionPromise = null;
 
+        if (MONGO_URL.startsWith("mongodb+srv://") && err.code === "ENOTFOUND") {
+          err.message =
+            "MongoDB Atlas hostname could not be resolved. Check the MONGO_URL value in backend/.env and make sure the cluster host is correct.";
+        }
 
+        throw err;
+      });
+  }
+
+  return connectionPromise;
 }
-
-main();
 
 
 const data =[
@@ -154,11 +166,11 @@ const data =[
 
 
 
-const initDB = async ()=>{
-   await Service.deleteMany({});
-   await Service.insertMany(data);
-   console.log("data was initialized");
-}
+const initDB = async () => {
+  await Service.deleteMany({});
+  await Service.insertMany(data);
+  console.log("data was initialized");
+};
 // initDB();
-module.exports = {main};
+module.exports = { main };
 
